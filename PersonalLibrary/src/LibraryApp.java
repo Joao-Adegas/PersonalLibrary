@@ -23,9 +23,16 @@ public class LibraryApp {
 
             switch (option){
                 case 1:
-                    System.out.printf("Voce digitou " + option + ":\n");
                     library.addBook();
                 break;
+                case 2:
+                    library.lendBool();
+                break;
+                case 3:
+                    library.returnBook();
+                break;
+                case 4:
+                    library.listBooks();
             }
 
         }while(option != 5);

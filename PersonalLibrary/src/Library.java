@@ -21,6 +21,20 @@ public class Library {
      *
      * */
 
+    public Book searchBookByISBN(String isnb){
+        for(Book b:listBooksDisponiveis ){
+            if(b.isStatus() == true  && b.getIsbn() != null && b.getIsbn().equalsIgnoreCase(isnb)){
+                return b;
+            }
+        }
+        for(Book b:listBooksIndisponiveis ){
+            if(b.isStatus() == false  && b.getIsbn() != null && b.getIsbn().equalsIgnoreCase(isnb)){
+                return b;
+            }
+        }
+        return null;
+    }
+
     public void showMenu(){
         System.out.println("Digite oque deseja fazer (1,2,3)\n" +
                 "1. Adicionar um livro\n2. Emprestar Livro\n3. Devolver Livro\n4. Listar Livros\n5. Sair\n\n");
@@ -35,6 +49,7 @@ public class Library {
             String titleBook = getData.nextLine();
             System.out.println("Digite o ISBN do livro:\n");
             String isbn = getData.nextLine();
+            System.out.println("ISBN: " + isbn);
             System.out.println("Digite o autor do livro:\n");
             String author = getData.nextLine();
 
@@ -49,31 +64,64 @@ public class Library {
     }
 
     // Emprestar Livro
-    public void lendBool(Book b){
-        if(b.isStatus() == false){
-            System.out.println("O livro " + b.getTitle() + " não esta disponível para ser emprestado\n");
-    }
-        else if(b.isStatus() == true){
-            System.out.println("Livro " + b.getTitle() + " emprestado com sucesso!!\n");
-            b.setStatus(false);
-            listBooksDisponiveis.remove(b);
-            listBooksIndisponiveis.add(b);
+    public void lendBool(){
+        System.out.println("Digite o ISBN do livro que deseja emprestar:\n");
+        String isbn = getData.nextLine();
+        Book b = searchBookByISBN(isbn);
+
+        try {
+            if(b.isStatus() == false){
+                System.out.println("O livro " + b.getTitle() + " não esta disponível para ser emprestado\n");
+            }
+            else if(b.isStatus() == true){
+                System.out.println("Livro " + b.getTitle() + " emprestado com sucesso!!\n");
+                b.setStatus(false);
+                listBooksDisponiveis.remove(b);
+                listBooksIndisponiveis.add(b);
+                System.out.println("Livros Disponiveis: " + listBooksDisponiveis);
+                System.out.println("Livros Indisponiveis: " + listBooksIndisponiveis.toString());
+            }
+        }catch (NullPointerException e){
+            System.out.println("O livro não existe!!\n");
         }
     }
 
     // Devolvere Livro
-    public void returnBook(Book b){
-        if(b.isStatus() == false){
-            System.out.println("Livro devolvido com sucesso!\n");
-            b.setStatus(true);
+    public void returnBook(){
+        try {
+            System.out.println("Digite o ISBN do livro que deseja devolver:\n");
+            String b = getData.nextLine();
+            Book book = searchBookByISBN(b);
+
+            if (book.getIsbn() != null){
+                if(book.isStatus() == false){
+                    System.out.println("Livro devolvido com sucesso!\n");
+                    book.setStatus(true);
+                }
+                else if(book.isStatus() == true){
+                    System.out.println("Não é possível devolver o livro por conta que ele ja não estava emprestado!!\n");
+
+                }
+
+            }
+            else{
+                System.out.println("O livro e nullo: " + book.getIsbn());
+            }
+        }catch (NullPointerException e){
+            System.out.println("O livro não existe!!\n");
         }
-        else if(b.isStatus() == true){
-            System.out.println("Não é possível devolver o livro por conta que ele ja não estava emprestado!!\n");
-        }
+
     }
 
     // Listar Livros
-    public String listBooks(){
-        return "Livros Disponiveis:\n" + listBooksDisponiveis;
+    public void listBooks(){
+        System.out.println("Livros Disponíveis:\n");
+        for(Book b: listBooksDisponiveis){
+            System.out.println(b.getTitle() + " - " + b.getAuthor());
+        }
+        System.out.println("Livros Indisponíveis:\n");
+        for(Book b: listBooksIndisponiveis){
+            System.out.println(b.getTitle() + " - " + b.getAuthor()+"\n");
+        }
     }
 }
