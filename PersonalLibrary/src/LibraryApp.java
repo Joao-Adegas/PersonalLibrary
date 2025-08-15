@@ -16,24 +16,29 @@ public class LibraryApp {
             library.showMenu();
             try {
                 option = getData.nextInt();
+                getData.nextLine();
+
+                switch (option){
+                    case 1:
+                        library.addBook();
+                        break;
+                    case 2:
+                        library.lendBool();
+                        break;
+                    case 3:
+                        library.returnBook();
+                        break;
+                    case 4:
+                        library.listBooks();
+                    default:
+                        System.out.println("Opção inválida, digite um numero de 1 a 5");
+                }
+
             }catch (InputMismatchException e){
                 System.out.println("Erro: Você deve digitar um numero de 1 a 5!!\n");
-                break;
+                getData.nextLine();
             }
 
-            switch (option){
-                case 1:
-                    library.addBook();
-                break;
-                case 2:
-                    library.lendBool();
-                break;
-                case 3:
-                    library.returnBook();
-                break;
-                case 4:
-                    library.listBooks();
-            }
 
         }while(option != 5);
 
